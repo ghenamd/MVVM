@@ -2,34 +2,26 @@ package com.zappcompany.githubex.model
 
 import com.zappcompany.githubex.Repository
 import com.zappcompany.githubex.utils.NetManager
+import io.reactivex.Observable
 
 class GitRepoRepository(val netManager: NetManager) {
 
     val localDataSource = GitRepoLocalDataSource()
     val remoteDataSource = GitRepoRemoteDataSource()
 
-    fun getRepositories(onRepositoryReadyCallback: OnRepositoryReadyCallback) {
+    fun getRepositories(): Observable<ArrayList<Repository>> {
            // operator let checks nullability and returns a value inside it
         netManager.isConnectedToInternet?.let {
             if (it) {
-                remoteDataSource.getRepositories(object : OnRepoRemoteReadyCallback {
-                    override fun onRemoteDataReady(data: ArrayList<Repository>) {
-                        localDataSource.saveRepositories(data)
-                        onRepositoryReadyCallback.onDataReady(data)
-                    }
-                })
-            } else {
-                localDataSource.getRepositories(object : OnRepoLocalReadyCallback {
-                    override fun onLocalDataReady(data: ArrayList<Repository>) {
-                        onRepositoryReadyCallback.onDataReady(data)
-                    }
-                })
+                return remoteDataSource.getRepositories().flatMap {
+                    return@flatMap localDataSource.saveRepositories(it)
+                        .toSingleDefault(it)
+                        .toObservable()
+
+                }
             }
         }
+
+        return localDataSource.getRepositories()
     }
-}
-
-
-interface OnRepositoryReadyCallback {
-    fun onDataReady(data: ArrayList<Repository>)
 }
