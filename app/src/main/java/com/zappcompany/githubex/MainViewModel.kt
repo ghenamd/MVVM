@@ -1,32 +1,25 @@
 package com.zappcompany.githubex
 
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
-import com.zappcompany.githubex.model.OnDataReadyCallback
+import com.zappcompany.githubex.model.GitRepoRepository
 import com.zappcompany.githubex.model.OnRepositoryReadyCallback
-import com.zappcompany.githubex.model.RepoModel
+import com.zappcompany.githubex.utils.NetManager
 
-class MainViewModel : ViewModel() {
-    var repoModel: RepoModel = RepoModel()
+class MainViewModel : AndroidViewModel {
+    constructor(application: Application) : super(application)
 
-    val text = ObservableField<String>("old data")
+    var gitRepoRepository: GitRepoRepository = GitRepoRepository(NetManager(getApplication()))
+
     var repositories = MutableLiveData<ArrayList<Repository>>()
 
     val isLoading = ObservableField<Boolean>(false)
 
-    fun refresh(){
-        isLoading.set(true)
-        repoModel.refreshData(object : OnDataReadyCallback {
-            override fun onDataReady(data: String) {
-                isLoading.set(false)
-                text.set(data)
-            }
-        })
-    }
     fun loadRepositories(){
         isLoading.set(true)
-        repoModel.getRepositories(object :OnRepositoryReadyCallback{
+        gitRepoRepository.getRepositories(object :OnRepositoryReadyCallback{
             override fun onDataReady(data: ArrayList<Repository>) {
                 isLoading.set(false)
                 repositories.value = data
