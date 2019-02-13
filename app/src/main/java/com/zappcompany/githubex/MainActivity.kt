@@ -20,13 +20,15 @@ class MainActivity : DaggerAppCompatActivity() ,RepositoryRecyclerViewAdapter.On
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
-        val viewModel = ViewModelProviders.of(this,viewModelFactory).get(MainViewModel::class.java)
+
+        val viewModel = ViewModelProviders.of(this,viewModelFactory).get(MainActivityViewModel::class.java)
+
         binding.viewModel=viewModel
         binding.executePendingBindings()
         binding.repositoryRv.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         binding.repositoryRv.adapter = repositoryRecyclerViewAdapter
         viewModel.repositories.observe(this, Observer { it ->
-            it?.let { repositoryRecyclerViewAdapter.replaceData(it)
+            it?.let { repositoryRecyclerViewAdapter.addData(it)
         } })
 
     }

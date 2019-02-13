@@ -1,6 +1,5 @@
 package com.zappcompany.githubex.di
 
-import com.zappcompany.githubex.modules.MainActivityModule
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule

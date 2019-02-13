@@ -10,7 +10,7 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor( var gitRepoRepository: GitRepoRepository) : ViewModel() {
+class MainActivityViewModel @Inject constructor(var gitRepoRepository: GitRepoRepository) : ViewModel() {
 
     var repositories = MutableLiveData<ArrayList<Repository>>()
 

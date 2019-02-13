@@ -24,7 +24,7 @@ class RepositoryRecyclerViewAdapter(private var items: ArrayList<Repository>,
     interface OnItemClickListener {
         fun onItemClick(position: Int)
     }
-    fun replaceData(itemz: ArrayList<Repository>){
+    fun addData(itemz: ArrayList<Repository>){
         items = itemz
         notifyDataSetChanged()
     }
