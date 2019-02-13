@@ -1,22 +1,26 @@
 package com.zappcompany.githubex
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.zappcompany.githubex.databinding.ActivityMainBinding
+import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() ,RepositoryRecyclerViewAdapter.OnItemClickListener{
+class MainActivity : DaggerAppCompatActivity() ,RepositoryRecyclerViewAdapter.OnItemClickListener{
 
+
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var binding :ActivityMainBinding
     private val repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter(arrayListOf(), this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
-        val viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        val viewModel = ViewModelProviders.of(this,viewModelFactory).get(MainViewModel::class.java)
         binding.viewModel=viewModel
         binding.executePendingBindings()
         binding.repositoryRv.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)

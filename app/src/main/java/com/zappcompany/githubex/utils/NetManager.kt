@@ -2,8 +2,11 @@ package com.zappcompany.githubex.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NetManager(private val context: Context) {
+
+class NetManager @Inject constructor(val context: Context) {
     private var status: Boolean? = false
 
     val isConnectedToInternet: Boolean?

@@ -3,8 +3,9 @@ package com.zappcompany.githubex.model
 import com.zappcompany.githubex.Repository
 import com.zappcompany.githubex.utils.NetManager
 import io.reactivex.Observable
+import javax.inject.Inject
 
-class GitRepoRepository(val netManager: NetManager) {
+class GitRepoRepository @Inject constructor(val netManager: NetManager) {
 
     val localDataSource = GitRepoLocalDataSource()
     val remoteDataSource = GitRepoRemoteDataSource()
